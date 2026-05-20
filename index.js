@@ -8,18 +8,22 @@ const bookingRoutes = require('./routes/bookings');
 const authRoutes = require('./routes/auth');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:3000'
+  origin: [
+    'http://localhost:3000',
+    'https://mediqueue-client.vercel.app',
+  ],
+  credentials: true,
 }));
 app.use(express.json());
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI)
-    .then(() => console.log('✅ Connected to MongoDB'))
-    .catch((err) => console.error('❌ MongoDB error:', err));
+  .then(() => console.log('✅ Connected to MongoDB'))
+  .catch((err) => console.error('❌ MongoDB error:', err));
 
 // Routes
 app.use('/tutors', tutorRoutes);
@@ -28,9 +32,9 @@ app.use('/jwt', authRoutes);
 
 // Health check
 app.get('/', (req, res) => {
-    res.json({ message: 'TutorNova API is running 🚀' });
+  res.json({ message: 'MediQueue API is running 🚀' });
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🚀 MediQueue Server running on port ${PORT}`);
 });
