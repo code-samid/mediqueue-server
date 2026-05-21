@@ -10,7 +10,7 @@ const authRoutes = require('./routes/auth');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// CORS fix
+// CORS fix — function based, no wildcard
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin) return callback(null, true);
@@ -28,7 +28,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-app.options('*', cors());
 app.use(express.json());
 
 // MongoDB connection
