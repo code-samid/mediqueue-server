@@ -10,20 +10,15 @@ const authRoutes = require('./routes/auth');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// CORS — must be before everything else
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://mediqueue-client-omega.vercel.app',
-];
-
+// CORS fix
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, Postman)
     if (!origin) return callback(null, true);
-    if (
-      allowedOrigins.includes(origin) ||
-      /\.vercel\.app$/.test(origin)
-    ) {
+    const allowed = [
+      'http://localhost:3000',
+      'https://mediqueue-client-omega.vercel.app',
+    ];
+    if (allowed.includes(origin) || origin.endsWith('.vercel.app')) {
       return callback(null, true);
     }
     return callback(new Error('Not allowed by CORS'));
@@ -33,9 +28,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
-// Handle preflight requests
 app.options('*', cors());
-
 app.use(express.json());
 
 // MongoDB connection
